@@ -1,1 +1,1 @@
-# gitops-register-app-cd
+# gitops-register-app
