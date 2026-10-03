@@ -33,19 +33,16 @@ pipeline {
         }
 
         stage("Push the changed deployment file to Git") {
-            steps {
-                sh """
-                    git config --global user.name "rahulgpt2202"
-                    git config --global user.email "rahulgpt2202@gmail.com"
-                    git add deployment.yaml
-                    git commit -m "Updated Deployment Manifest"
-                """
+            steps {
+                sh """
+                    git config user.name "rahulgpt2202"
+                    git config user.email "rahulgpt2202@gmail.com"
+                    git add deployment.yaml
+                    git commit -m "Updated Deployment Manifest to ${params.IMAGE_TAG}" || echo "No changes to commit"
+                """
 
-                withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
-                    sh "git push https://${GIT_TOKEN}@github.com/rahulgpt2202/gitops-register-app-cd.git main"
-                }
-            }
-        }
+                withCredentials([gitUsernamePassword(credentialsId: 'github', gitToolName: 'Default')]) {
+                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/rahulgpt2202/gitops-register-app-cd.git main"
                 }
             }
         }
